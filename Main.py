@@ -40,8 +40,8 @@ SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
 scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/simpler_basic.cfg" # Name and path of scenario
-model_savefile = "/home/ghmiao/zhangli/DRQN-vizdoom/model/model.ckpt" # Name and path of the model
-reward_savefile = "/home/ghmiao/zhangli/DRQN-vizdoom/Rewards_MWH.txt"
+model_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/model.ckpt" # Name and path of the model
+reward_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/Rewards_MWH.txt"
 
 ##########################################
 
@@ -59,7 +59,7 @@ def initialize_vizdoom():
     return game
 
 def preprocess(img):
-    img = skimage.transform.resize(img,RESOLUTION)
+    img = skimage.transform.resize(img,RESOLUTION, mode='constant')
     img = img.astype(np.float32)
     return img
 

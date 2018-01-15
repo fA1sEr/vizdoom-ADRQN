@@ -24,7 +24,7 @@ class Network:
 
         self.cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)
         self.train_length = tf.placeholder(dtype=tf.int32)
-        self.batch_size = tf.placeholder(dtype=tf.int32, [])
+        self.batch_size = tf.placeholder(dtype=tf.int32, shape=[])
 
         self.fc_reshape = tf.reshape(flat, [self.batch_size, self.train_length, hidden_size])
         self.state_in = self.cell.zero_state(self.batch_size, tf.float32)
