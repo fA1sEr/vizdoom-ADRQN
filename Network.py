@@ -8,17 +8,22 @@ class Network:
         self.resolution = resolution
         self.train_batch_size = batch_size
         self.trace_length_size = trace_length
+        print("--------------------------checkpoint 0")
 
         self.state = tf.placeholder(tf.float32, shape=[None, resolution[0], resolution[1], resolution[2]])
+        print("--------------------------checkpoint 1")
 
         conv1 = slim.conv2d(inputs=self.state, num_outputs=32, kernel_size=[8, 8], stride=[4, 4],
                             activation_fn=tf.nn.relu, padding='VALID', scope=scope+'_c1')
+        print("--------------------------checkpoint 2")                    
 
         conv2 = slim.conv2d(inputs=conv1, num_outputs=64, kernel_size=[4, 4], stride=[2, 2],
                             activation_fn=tf.nn.relu, padding='VALID', scope=scope+'_c2')
+        print("--------------------------checkpoint 3")                    
 
         conv3 = slim.conv2d(inputs=conv2, num_outputs=64, kernel_size=[3, 3], stride=[1, 1],
                             activation_fn=tf.nn.relu, padding='VALID', scope=scope+'_c3')
+        print("--------------------------checkpoint 4")                    
 
         flat = slim.flatten(conv3)
 
