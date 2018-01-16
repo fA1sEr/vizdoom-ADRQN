@@ -1,4 +1,5 @@
 import itertools as it
+import os
 from time import time, sleep
 import numpy as np
 import skimage.color
@@ -6,8 +7,10 @@ import skimage.transform
 import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
-
 from Agent import Agent
+
+# to choose gpu
+os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
