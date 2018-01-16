@@ -203,7 +203,7 @@ if not SKIP_LEARNING:
                 saver.save(SESSION, model_savefile, global_step=epoch)
 
         print("Total ellapsed time: %.2f minutes" % ((time() - time_start) / 60.0))
-
+'''
 print("TIME TO WATCH!!")
 # Reinitialize the game with window visible
 game.close()
@@ -231,3 +231,4 @@ score = np.array(score)
 game.close()
 print("Results: mean: %.1f±%.1f," % (score.mean(), score.std()),
           "min: %.1f" % score.min(), "max: %.1f" % score.max())
+'''
