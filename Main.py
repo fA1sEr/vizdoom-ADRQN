@@ -1,4 +1,5 @@
 import itertools as it
+import os
 from time import time, sleep
 import numpy as np
 import skimage.color
@@ -6,8 +7,10 @@ import skimage.transform
 import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
-
 from Agent import Agent
+
+# to choose gpu
+os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
@@ -200,7 +203,7 @@ if not SKIP_LEARNING:
                 saver.save(SESSION, model_savefile, global_step=epoch)
 
         print("Total ellapsed time: %.2f minutes" % ((time() - time_start) / 60.0))
-
+'''
 print("TIME TO WATCH!!")
 # Reinitialize the game with window visible
 game.close()
@@ -228,3 +231,4 @@ score = np.array(score)
 game.close()
 print("Results: mean: %.1f±%.1f," % (score.mean(), score.std()),
           "min: %.1f" % score.min(), "max: %.1f" % score.max())
+'''
