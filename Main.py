@@ -109,14 +109,13 @@ if not SKIP_LEARNING:
     state = preprocess(game.get_state())
     for _ in trange(RANDOM_WANDER_STEPS, leave=False):
         action = agent.random_action()
-        s,reward,d = game.make_action(action)
-        done = game.is_terminared()
+        last_action, img_state, reward, done = game.make_action(action)
         if not done:
-            state_new = preprocess(game.get_state())
+            state_new = preprocess(img_state)
         else:
             state_new = None
 
-        agent.add_transition(state, action, reward, state_new, done)
+        agent.add_transition(last_action, state, action, reward, state_new, done)
         state = state_new
 
         if done:
@@ -138,13 +137,13 @@ if not SKIP_LEARNING:
         state = preprocess(game.get_state())
         for learning_step in trange(STEPS_PER_EPOCH, leave=False):
             action = agent.act(state)
-            imgstate, reward, done = game.make_action(action)
+            last_action, img_state, reward, done = game.make_action(action)
             if not done:
-                state_new = preprocess(imgstate)
+                state_new = preprocess(img_state)
             else:
                 state_new = None
 
-            agent.add_transition(state, action, reward, state_new, done)
+            agent.add_transition(last_action, state, action, reward, state_new, done)
             state = state_new
 
             if learning_step % UPDATE_FREQUENCY == 0:
