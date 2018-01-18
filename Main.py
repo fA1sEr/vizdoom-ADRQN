@@ -71,7 +71,7 @@ def saveScore(score):
 
 ###########################################
 
-game = GameSimulator
+game = GameSimulator()
 game.initialize()
 
 ACTION_COUNT = game.get_action_size()
