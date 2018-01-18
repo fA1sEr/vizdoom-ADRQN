@@ -8,6 +8,7 @@ import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
 from Agent import Agent
+from GameSimulator import GameSimulator
 
 # to choose gpu
 os.environ["CUDA_VISIBLE_DEVICES"] = "5"
@@ -42,7 +43,6 @@ LOAD_MODEL = False # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
-scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/simpler_basic.cfg" # Name and path of scenario
 model_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/model.ckpt" # Name and path of the model
 reward_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/Rewards_MWH.txt"
 
@@ -84,9 +84,10 @@ def saveScore(score):
 
 ###########################################
 
-game = initialize_vizdoom()
+game = GameSimulator
+game.initialize()
 
-n = game.get_available_buttons_size()
+n = game.get_action_size()
 actions = [list(a) for a in it.product([0, 1], repeat=n)]
 ACTION_COUNT = len(actions)
 
