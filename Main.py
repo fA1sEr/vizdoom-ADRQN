@@ -74,9 +74,7 @@ def saveScore(score):
 game = GameSimulator
 game.initialize()
 
-n = game.get_action_size()
-actions = [list(a) for a in it.product([0, 1], repeat=n)]
-ACTION_COUNT = len(actions)
+ACTION_COUNT = game.get_action_size()
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
 
@@ -111,7 +109,7 @@ if not SKIP_LEARNING:
     state = preprocess(game.get_state())
     for _ in trange(RANDOM_WANDER_STEPS, leave=False):
         action = agent.random_action()
-        reward = game.make_action(actions[action])
+        reward = game.make_action(action)
         done = game.is_terminared()
         if not done:
             state_new = preprocess(game.get_state())
@@ -140,7 +138,7 @@ if not SKIP_LEARNING:
         state = preprocess(game.get_state())
         for learning_step in trange(STEPS_PER_EPOCH, leave=False):
             action = agent.act(state)
-            reward = game.make_action(actions[action])
+            reward = game.make_action(action)
             done = game.is_terminared()
             if not done:
                 state_new = preprocess(game.get_state())
@@ -176,7 +174,7 @@ if not SKIP_LEARNING:
             while not game.is_terminared():
                 state = preprocess(game.get_state())
                 action = agent.act(state, train=False)
-                game.make_action(actions[action])
+                game.make_action(action)
             test_scores.append(game.get_total_reward())
 
         test_scores = np.array(test_scores)
