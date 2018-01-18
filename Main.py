@@ -8,6 +8,10 @@ import tensorflow as tf
 from tqdm import trange
 from vizdoom import *
 from Agent import Agent
+from GameSimulator import GameSimulator
+
+# to choose gpu
+os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
 # to choose gpu
 os.environ["CUDA_VISIBLE_DEVICES"] = "5"
@@ -42,24 +46,10 @@ LOAD_MODEL = False # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
-scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/simpler_basic.cfg" # Name and path of scenario
 model_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/model.ckpt" # Name and path of the model
-reward_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/Rewards_MWH.txt"
+reward_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/Rewards.txt"
 
 ##########################################
-
-def initialize_vizdoom():
-    print("Initializing doom...")
-    game = DoomGame()
-    game.load_config(scenario_path)
-    game.set_window_visible(False)
-    game.set_mode(Mode.PLAYER)
-    game.set_screen_format(ScreenFormat.RGB24)
-    game.set_screen_resolution(ScreenResolution.RES_400X225)
-    game.init()
-
-    print("Doom initialized.")
-    return game
 
 def preprocess(img):
     img = skimage.transform.resize(img,RESOLUTION, mode='constant')
@@ -79,16 +69,15 @@ def updateTarget(op_holder,sess):
 
 def saveScore(score):
     my_file = open(reward_savefile, 'a')  # Name and path of the reward text file
-    my_file.write("%s\n" % test_scores.mean())
+    my_file.write("%s\n" % score)
     my_file.close()
 
 ###########################################
 
-game = initialize_vizdoom()
+game = GameSimulator()
+game.initialize()
 
-n = game.get_available_buttons_size()
-actions = [list(a) for a in it.product([0, 1], repeat=n)]
-ACTION_COUNT = len(actions)
+ACTION_COUNT = game.get_action_size()
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
 
@@ -120,13 +109,13 @@ if not SKIP_LEARNING:
 
     episode_buffer = []
     agent.reset_cell_state()
-    state = preprocess(game.get_state().screen_buffer)
+    state = preprocess(game.get_state())
     for _ in trange(RANDOM_WANDER_STEPS, leave=False):
         action = agent.random_action()
-        reward = game.make_action(actions[action], FRAME_REPEAT)
-        done = game.is_episode_finished()
+        s,reward,d = game.make_action(action)
+        done = game.is_terminared()
         if not done:
-            state_new = preprocess(game.get_state().screen_buffer)
+            state_new = preprocess(game.get_state())
         else:
             state_new = None
 
@@ -134,9 +123,9 @@ if not SKIP_LEARNING:
         state = state_new
 
         if done:
-            game.new_episode()
+            game.reset()
             agent.reset_cell_state()
-            state = preprocess(game.get_state().screen_buffer)
+            state = preprocess(game.get_state())
 
     for epoch in range(EPOCHS):
         print("\n\nEpoch %d\n-------" % (epoch + 1))
@@ -145,17 +134,17 @@ if not SKIP_LEARNING:
         train_scores = []
 
         print("Training...")
-        game.new_episode()
+        game.reset()
 
         episode_buffer = []
         agent.reset_cell_state()
-        state = preprocess(game.get_state().screen_buffer)
+        state = preprocess(game.get_state())
         for learning_step in trange(STEPS_PER_EPOCH, leave=False):
             action = agent.act(state)
-            reward = game.make_action(actions[action], FRAME_REPEAT)
-            done = game.is_episode_finished()
+            s,reward,d = game.make_action(action)
+            done = game.is_terminared()
             if not done:
-                state_new = preprocess(game.get_state().screen_buffer)
+                state_new = preprocess(game.get_state())
             else:
                 state_new = None
 
@@ -169,9 +158,9 @@ if not SKIP_LEARNING:
             if done:
                 train_scores.append(game.get_total_reward())
                 train_episodes_finished += 1
-                game.new_episode()
+                game.reset()
                 agent.reset_cell_state()
-                state = preprocess(game.get_state().screen_buffer)
+                state = preprocess(game.get_state())
 
         print("%d training episodes played." % train_episodes_finished)
         train_scores = np.array(train_scores)
@@ -183,12 +172,12 @@ if not SKIP_LEARNING:
 
         test_scores = []
         for test_step in trange(EPISODES_TO_TEST, leave=False):
-            game.new_episode()
+            game.reset()
             agent.reset_cell_state()
-            while not game.is_episode_finished():
-                state = preprocess(game.get_state().screen_buffer)
+            while not game.is_terminared():
+                state = preprocess(game.get_state())
                 action = agent.act(state, train=False)
-                game.make_action(actions[action], FRAME_REPEAT)
+                game.make_action(action)
             test_scores.append(game.get_total_reward())
 
         test_scores = np.array(test_scores)
