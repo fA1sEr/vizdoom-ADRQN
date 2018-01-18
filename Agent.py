@@ -46,20 +46,20 @@ class Agent:
     def add_experience_to_buffer(self, episode_buffer):
         self.experience_buffer.add(episode_buffer)
 
-    def add_transition(self, s1, a, r, s2, d):
-        self.memory.add_transition(s1, a, r, s2, d)
+    def add_transition(self, a1, s1, a2, r, s2, d):
+        self.memory.add_transition(a1, s1, a2, r, s2, d)
 
     def learn_from_memory(self):
 
         if self.memory.size > self.min_buffer_size:
             state_in = (np.zeros([self.batch_size, self.hidden_size]), np.zeros([self.batch_size, self.hidden_size]))
-            s1, a, r, s2, d = self.memory.get_transition()
+            a1, s1, a2, r, s2, d = self.memory.get_transition()
             inputs = s1
 
             q = np.max(self.target_model.get_q(s2, state_in), axis=1)
             targets = r + self.gamma * (1 - d) * q
 
-            self.model.learn(inputs, targets, state_in, a)
+            self.model.learn(inputs, targets, state_in, a2)
 
     def act(self, state, train=True):
         if train:

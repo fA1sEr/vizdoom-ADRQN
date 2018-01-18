@@ -27,7 +27,7 @@ EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.1 # Min exploration rate
 EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 50000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 1000 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
@@ -138,10 +138,9 @@ if not SKIP_LEARNING:
         state = preprocess(game.get_state())
         for learning_step in trange(STEPS_PER_EPOCH, leave=False):
             action = agent.act(state)
-            s,reward,d = game.make_action(action)
-            done = game.is_terminared()
+            imgstate, reward, done = game.make_action(action)
             if not done:
-                state_new = preprocess(game.get_state())
+                state_new = preprocess(imgstate)
             else:
                 state_new = None
 
