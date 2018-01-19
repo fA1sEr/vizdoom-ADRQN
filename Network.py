@@ -28,7 +28,7 @@ class Network:
 
         state_flat = slim.flatten(conv3)
 
-        flat = tf.concat(0, [fc_action, state_flat])
+        flat = tf.concat([fc_action, state_flat], 1)
 
         self.cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size+self.fc_action_size, state_is_tuple=True)
         self.train_length = tf.placeholder(dtype=tf.int32)
