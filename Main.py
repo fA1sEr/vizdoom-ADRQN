@@ -43,8 +43,8 @@ LOAD_MODEL = False # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
-model_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/model.ckpt" # Name and path of the model
-reward_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/Rewards.txt"
+model_savefile = "train_data/model.ckpt" # Name and path of the model
+reward_savefile = "train_data/Rewards.txt"
 
 ##########################################
 

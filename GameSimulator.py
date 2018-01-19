@@ -22,7 +22,7 @@ class GameSimulator:
         self.game.loadROM(rom)
         # 获取屏幕大小
         self.screen_width, self.screen_height = self.game.getScreenDims()
-        # 初始化动作 one_hot
+        # 初始化动作 one_hot Actions: [0 3 4]
         self.actions = self.game.getMinimalActionSet()
         print('Actions:', self.actions)
         print("Atari initialized.")

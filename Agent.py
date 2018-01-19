@@ -51,7 +51,7 @@ class Agent:
             q = np.max(self.target_model.get_q(s2, state_in), axis=1)
             targets = r + self.gamma * (1 - d) * q
 
-            self.model.learn(inputs, targets, state_in, a2)
+            self.model.learn(a1, inputs, targets, state_in, a2)
 
     def act(self, state, train=True):
         if train:
