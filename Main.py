@@ -13,9 +13,6 @@ from GameSimulator import GameSimulator
 # to choose gpu
 os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
-# to choose gpu
-os.environ["CUDA_VISIBLE_DEVICES"] = "5"
-
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
 
@@ -46,8 +43,8 @@ LOAD_MODEL = False # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
-model_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/model.ckpt" # Name and path of the model
-reward_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/Rewards.txt"
+model_savefile = "train_data/model.ckpt" # Name and path of the model
+reward_savefile = "train_data/Rewards.txt"
 
 ##########################################
 
@@ -112,10 +109,9 @@ if not SKIP_LEARNING:
     state = preprocess(game.get_state())
     for _ in trange(RANDOM_WANDER_STEPS, leave=False):
         action = agent.random_action()
-        s,reward,d = game.make_action(action)
-        done = game.is_terminared()
+        img_state, reward, done = game.make_action(action)
         if not done:
-            state_new = preprocess(game.get_state())
+            state_new = preprocess(img_state)
         else:
             state_new = None
 
@@ -141,10 +137,9 @@ if not SKIP_LEARNING:
         state = preprocess(game.get_state())
         for learning_step in trange(STEPS_PER_EPOCH, leave=False):
             action = agent.act(state)
-            s,reward,d = game.make_action(action)
-            done = game.is_terminared()
+            img_state, reward, done = game.make_action(action)
             if not done:
-                state_new = preprocess(game.get_state())
+                state_new = preprocess(img_state)
             else:
                 state_new = None
 
