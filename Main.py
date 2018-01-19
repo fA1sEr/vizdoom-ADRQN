@@ -32,7 +32,7 @@ RANDOM_WANDER_STEPS = 0 # How many steps to be sampled randomly before training 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
-EPOCHS = 200000 # Epochs for training (1 epoch = 10k training steps and 10 test episodes)
+EPOCHS = 20000000 # Epochs for training (1 epoch = 10k training steps and 10 test episodes)
 STEPS_PER_EPOCH = 10000 # How actions to be taken per epoch
 EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
@@ -107,7 +107,7 @@ if not SKIP_LEARNING:
     episode_buffer = []
     agent.reset_cell_state()
     state = preprocess(game.get_state())
-    for _ in trange(RANDOM_WANDER_STEPS, leave=False):
+    for _ in range(RANDOM_WANDER_STEPS):
         action = agent.random_action()
         img_state, reward, done = game.make_action(action)
         if not done:
@@ -135,7 +135,7 @@ if not SKIP_LEARNING:
         episode_buffer = []
         agent.reset_cell_state()
         state = preprocess(game.get_state())
-        for learning_step in trange(STEPS_PER_EPOCH, leave=False):
+        for learning_step in range(STEPS_PER_EPOCH):
             action = agent.act(state)
             img_state, reward, done = game.make_action(action)
             if not done:
@@ -166,7 +166,7 @@ if not SKIP_LEARNING:
         print("\nTesting...")
 
         test_scores = []
-        for test_step in trange(EPISODES_TO_TEST, leave=False):
+        for test_step in range(EPISODES_TO_TEST):
             game.reset()
             agent.reset_cell_state()
             while not game.is_terminared():
