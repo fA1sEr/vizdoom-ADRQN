@@ -12,7 +12,7 @@ class Network:
 
         self.input_action = tf.placeholder(tf.float32, shape=[None, action_count])
 
-        self.fc_action = slim.fully_connected(self.input_action, self.fc_action_size, activation_fn=None)
+        fc_action = slim.fully_connected(self.input_action, self.fc_action_size, activation_fn=None)
 
         # 80*45*3
         self.state = tf.placeholder(tf.float32, shape=[None, resolution[0], resolution[1], resolution[2]])
