@@ -43,8 +43,8 @@ SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
 scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/simpler_basic.cfg" # Name and path of scenario
-model_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/model.ckpt" # Name and path of the model
-reward_savefile = "/home/ghmiao/zhangli/vizdoom-ADRQN/train_data/Rewards_MWH.txt"
+model_savefile = "train_data/model.ckpt" # Name and path of the model
+reward_savefile = "train_data/Rewards.txt"
 
 ##########################################
 
@@ -79,7 +79,7 @@ def updateTarget(op_holder,sess):
 
 def saveScore(score):
     my_file = open(reward_savefile, 'a')  # Name and path of the reward text file
-    my_file.write("%s\n" % test_scores.mean())
+    my_file.write("%s\n" % score)
     my_file.close()
 
 ###########################################
