@@ -10,7 +10,7 @@ class Network:
         self.trace_length_size = trace_length
         self.fc_action_size = 128
 
-        self.input_action = tf.placeholder(tf.float32, shape=[None, action_count])
+        self.input_action = tf.placeholder(tf.float32, shape=[1, action_count])
 
         fc_action = slim.fully_connected(self.input_action, self.fc_action_size, activation_fn=None)
 
@@ -56,8 +56,8 @@ class Network:
         self.train_step = self.optimizer.minimize(self.loss)
 
     def learn(self, input_action, state, target_q, state_in, action):
-        onehot = [0]*self.action_count
-        onehot[input_action] = 1
+        onehot = [[0]*self.action_count]
+        onehot[0][input_action] = 1
         feed_dict = {self.state: state, self.target_q: target_q, self.train_length: self.trace_length_size,
                      self.batch_size: self.train_batch_size, self.state_in: state_in, self.actions: action,
                      self.input_action: onehot}
