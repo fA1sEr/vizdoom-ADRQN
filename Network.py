@@ -56,9 +56,11 @@ class Network:
         self.train_step = self.optimizer.minimize(self.loss)
 
     def learn(self, input_action, state, target_q, state_in, action):
+        onehot = [0]*self.action_count
+        onehot[input_action] = 1
         feed_dict = {self.state: state, self.target_q: target_q, self.train_length: self.trace_length_size,
                      self.batch_size: self.train_batch_size, self.state_in: state_in, self.actions: action,
-                     self.input_action: input_action}
+                     self.input_action: onehot}
         l, _ = self.session.run([self.loss, self.train_step], feed_dict=feed_dict)
         return l
 
