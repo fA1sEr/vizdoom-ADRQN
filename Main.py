@@ -27,19 +27,19 @@ EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.1 # Min exploration rate
 EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 50000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 0 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
-EPOCHS = 200 # Epochs for training (1 epoch = 10k training steps and 10 test episodes)
+EPOCHS = 200000 # Epochs for training (1 epoch = 10k training steps and 10 test episodes)
 STEPS_PER_EPOCH = 10000 # How actions to be taken per epoch
 EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
 TAU = 0.001 # How much the target network should be updated towards the online network at each update
 
-LOAD_MODEL = False # Load a saved model?
+LOAD_MODEL = True # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
