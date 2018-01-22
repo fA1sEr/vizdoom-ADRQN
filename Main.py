@@ -91,6 +91,7 @@ trainables = tf.trainable_variables()
 targetOps = updateTargetGraph(trainables, TAU)
 
 if LOAD_MODEL:
+    EPSILON_MAX = 0.1 # restart after 20+ epoch
     print("Loading model from: ", model_savefile)
     saver.restore(SESSION, model_savefile)
 else:
