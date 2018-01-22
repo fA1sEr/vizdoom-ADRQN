@@ -15,10 +15,11 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "5"
 
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
+COPY_FREQUENCY = 1000
 
 RESOLUTION = (80, 45, 3) # Resolution
 BATCH_SIZE = 32 # Batch size for experience replay
-LEARNING_RATE = 0.00025 # Learning rate of model
+LEARNING_RATE = 0.001 # Learning rate of model
 GAMMA = 0.99 # Discount factor
 
 MEMORY_CAP = 1000000 # Amount of samples to store in memory
@@ -37,7 +38,7 @@ STEPS_PER_EPOCH = 10000 # How actions to be taken per epoch
 EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
-TAU = 0.001 # How much the target network should be updated towards the online network at each update
+TAU = 0.99 # How much the target network should be updated towards the online network at each update
 
 LOAD_MODEL = True # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
@@ -151,7 +152,8 @@ if not SKIP_LEARNING:
 
             if learning_step % UPDATE_FREQUENCY == 0:
                 agent.learn_from_memory()
-                updateTarget(targetOps, SESSION)
+                if learning_step % COPY_FREQUENCY == 0:
+                    updateTarget(targetOps, SESSION)
 
             if done:
                 train_scores.append(game.get_total_reward())
