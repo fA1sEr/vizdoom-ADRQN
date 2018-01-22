@@ -152,7 +152,7 @@ if not SKIP_LEARNING:
                     updateTarget(targetOps, SESSION)
 
                 if done:
-                    print("Epoch %d Train Game %d get %.lf" % epoch, games_cnt, game.get_total_reward())
+                    print("Epoch %d Train Game %d get %.1f" % epoch, games_cnt, game.get_total_reward())
                     break
 
         print("\nTesting...")
