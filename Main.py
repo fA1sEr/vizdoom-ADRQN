@@ -80,6 +80,9 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
 
 SESSION = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
+if LOAD_MODEL:
+    EPSILON_MAX = 0.1 # restart after 20+ epoch
+
 agent = Agent(memory_cap = MEMORY_CAP, batch_size = BATCH_SIZE, resolution = RESOLUTION, action_count = ACTION_COUNT,
             session = SESSION, lr = LEARNING_RATE, gamma = GAMMA, epsilon_min = EPSILON_MIN, trace_length=TRACE_LENGTH,
             epsilon_decay_steps = EPSILON_DECAY_STEPS, epsilon_max=EPSILON_MAX, hidden_size=HIDDEN_SIZE)
@@ -91,7 +94,6 @@ trainables = tf.trainable_variables()
 targetOps = updateTargetGraph(trainables, TAU)
 
 if LOAD_MODEL:
-    EPSILON_MAX = 0.1 # restart after 20+ epoch
     print("Loading model from: ", model_savefile)
     saver.restore(SESSION, model_savefile)
 else:
