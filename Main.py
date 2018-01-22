@@ -33,8 +33,8 @@ RANDOM_WANDER_STEPS = 0 # How many steps to be sampled randomly before training 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
-EPOCHS = 20000000 # Epochs for training (1 epoch = 10k training steps and 10 test episodes)
-STEPS_PER_EPOCH = 10000 # How actions to be taken per epoch
+EPOCHS = 20000000 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
+GAMES_PER_EPOCH = 200 # How actions to be taken per epoch
 EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
@@ -108,7 +108,6 @@ if not SKIP_LEARNING:
     print("\nFilling out replay memory")
     updateTarget(targetOps, SESSION)
 
-    episode_buffer = []
     agent.reset_cell_state()
     state = preprocess(game.get_state())
     for _ in range(RANDOM_WANDER_STEPS):
@@ -129,44 +128,32 @@ if not SKIP_LEARNING:
 
     for epoch in range(EPOCHS):
         print("\n\nEpoch %d\n-------" % (epoch + 1))
-
-        train_episodes_finished = 0
-        train_scores = []
-
         print("Training...")
-        game.reset()
 
-        episode_buffer = []
-        agent.reset_cell_state()
-        state = preprocess(game.get_state())
-        for learning_step in range(STEPS_PER_EPOCH):
-            action = agent.act(state)
-            img_state, reward, done = game.make_action(action)
-            if not done:
-                state_new = preprocess(img_state)
-            else:
-                state_new = None
+        learning_step = 0
+        for games_cnt in range(GAMES_PER_EPOCH):
+            game.reset()
+            agent.reset_cell_state()
+            state = preprocess(game.get_state())
+            while not game.is_terminared():
+                learning_step += 1
+                action = agent.act(state)
+                img_state, reward, done = game.make_action(action)
+                if not done:
+                    state_new = preprocess(img_state)
+                else:
+                    state_new = None
+                agent.add_transition(state, action, reward, state_new, done)
+                state = state_new
 
-            agent.add_transition(state, action, reward, state_new, done)
-            state = state_new
-
-            if learning_step % UPDATE_FREQUENCY == 0:
-                agent.learn_from_memory()
+                if learning_step % UPDATE_FREQUENCY == 0:
+                    agent.learn_from_memory()
                 if learning_step % COPY_FREQUENCY == 0:
                     updateTarget(targetOps, SESSION)
 
-            if done:
-                train_scores.append(game.get_total_reward())
-                train_episodes_finished += 1
-                game.reset()
-                agent.reset_cell_state()
-                state = preprocess(game.get_state())
-
-        print("%d training episodes played." % train_episodes_finished)
-        train_scores = np.array(train_scores)
-
-        print("Results: mean: %.1f±%.1f," % (train_scores.mean(), train_scores.std()),
-            "min: %.1f," % train_scores.min(), "max: %.1f," % train_scores.max())
+                if done:
+                    print("Epoch %d Train Game %d get %.lf" % epoch, games_cnt, game.get_total_reward())
+                    break
 
         print("\nTesting...")
 
