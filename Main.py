@@ -22,7 +22,7 @@ BATCH_SIZE = 32 # Batch size for experience replay
 LEARNING_RATE = 0.001 # Learning rate of model
 GAMMA = 0.99 # Discount factor
 
-MEMORY_CAP = 1000000 # Amount of samples to store in memory
+MEMORY_CAP = 100000 # Amount of samples to store in memory
 
 EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.05 # Min exploration rate
