@@ -25,7 +25,7 @@ GAMMA = 0.99 # Discount factor
 MEMORY_CAP = 1000000 # Amount of samples to store in memory
 
 EPSILON_MAX = 1 # Max exploration rate
-EPSILON_MIN = 0.1 # Min exploration rate
+EPSILON_MIN = 0.05 # Min exploration rate
 EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
 
 RANDOM_WANDER_STEPS = 0 # How many steps to be sampled randomly before training starts
@@ -82,7 +82,7 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
 SESSION = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 if LOAD_MODEL:
-    EPSILON_MAX = 0.1 # restart after 20+ epoch
+    EPSILON_MAX = 0.05 # restart after 20+ epoch
 
 agent = Agent(memory_cap = MEMORY_CAP, batch_size = BATCH_SIZE, resolution = RESOLUTION, action_count = ACTION_COUNT,
             session = SESSION, lr = LEARNING_RATE, gamma = GAMMA, epsilon_min = EPSILON_MIN, trace_length=TRACE_LENGTH,
@@ -135,7 +135,7 @@ if not SKIP_LEARNING:
             game.reset()
             agent.reset_cell_state()
             state = preprocess(game.get_state())
-            while not game.is_terminared():
+            while True:
                 learning_step += 1
                 action = agent.act(state)
                 img_state, reward, done = game.make_action(action)
@@ -154,6 +154,9 @@ if not SKIP_LEARNING:
                 if done:
                     print("Epoch %d Train Game %d get %.1f" % (epoch, games_cnt, game.get_total_reward()))
                     break
+            if SAVE_MODEL and games_cnt % 10 == 0:
+                saver.save(SESSION, model_savefile)
+                print("Saving the network weigths to:", model_savefile)
 
         print("\nTesting...")
 
