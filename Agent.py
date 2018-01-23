@@ -1,9 +1,6 @@
 from random import randint, random
-
 import numpy as np
-
 from Network import Network
-from ExperienceBuffer import ExperienceBuffer
 from ReplayMemory import ReplayMemory
 
 
@@ -17,8 +14,6 @@ class Agent:
         self.target_model = Network(session=session, action_count=action_count,
                                     resolution=resolution, lr=lr, batch_size=batch_size,
                                     trace_length=trace_length, hidden_size=hidden_size, scope='target')
-
-        self.experience_buffer = ExperienceBuffer(buffer_size=memory_cap)
 
         self.memory = ReplayMemory(memory_cap=memory_cap, batch_size=batch_size,
                                    resolution=resolution, trace_length=trace_length)
