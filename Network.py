@@ -92,10 +92,10 @@ class Network:
         act_onehot = [0]*self.action_count
         act_onehot[last_action] = 1
         return self.session.run([self.best_a, self.rnn_state], feed_dict={self.state: [state], self.train_length: 1,
-                                                                          self.batch_size: 1, self.state_in: state_in, self.act:act_onehot})
+                                                                          self.batch_size: 1, self.state_in: state_in, self.act:[act_onehot]})
 
     def get_cell_state(self, last_action, state, state_in):
         act_onehot = [0]*self.action_count
         act_onehot[last_action] = 1
         return self.session.run(self.rnn_state, feed_dict={self.state: [state], self.train_length: 1,
-                                                           self.state_in: state_in, self.batch_size: 1, self.act:act_onehot})
+                                                           self.state_in: state_in, self.batch_size: 1, self.act:[act_onehot]})
