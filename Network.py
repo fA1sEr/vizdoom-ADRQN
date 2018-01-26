@@ -9,6 +9,7 @@ class Network:
         self.train_batch_size = batch_size
         self.trace_length_size = trace_length
         self.action_fc_size = 128
+        self.action_count = action_count
 
         # shape = [8*32,80,45,3]
         self.state = tf.placeholder(tf.float32, shape=[None, resolution[0], resolution[1], resolution[2]])
