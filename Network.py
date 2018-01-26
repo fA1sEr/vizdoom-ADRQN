@@ -18,7 +18,7 @@ class Network:
         self.act = tf.placeholder(tf.float32, shape=[None, action_count])
 
         # shape = [8*32,128]
-        action_fc = slim.fully_connected(self.act, action_count, activation_fn=None)
+        action_fc = slim.fully_connected(self.act, self.action_fc_size, activation_fn=None)
 
         # shape = [8*32,19,10,32]
         conv1 = slim.conv2d(inputs=self.state, num_outputs=32, kernel_size=[8, 8], stride=[4, 4],
