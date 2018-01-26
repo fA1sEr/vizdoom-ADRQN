@@ -78,14 +78,23 @@ class Network:
         l, _ = self.session.run([self.loss, self.train_step], feed_dict=feed_dict)
         return l
 
-    def get_q(self, state, state_in):
+    def get_q(self, last_action, state, state_in):
+        act_onehot = []
+        for i in range(32*8):
+            tmp = [0]*self.action_count
+            tmp[last_action[i]] = 1
+            act_onehot.append(tmp)
         return self.session.run(self.q, feed_dict={self.state: state, self.train_length: self.trace_length_size,
-                                                   self.batch_size: self.train_batch_size, self.state_in: state_in})
+                                                   self.batch_size: self.train_batch_size, self.state_in: state_in, self.act: act_onehot})
 
-    def get_best_action(self, state, state_in):
+    def get_best_action(self, last_action, state, state_in):
+        act_onehot = [0]*self.action_count
+        act_onehot[last_action] = 1
         return self.session.run([self.best_a, self.rnn_state], feed_dict={self.state: [state], self.train_length: 1,
-                                                                          self.batch_size: 1, self.state_in: state_in})
+                                                                          self.batch_size: 1, self.state_in: state_in, self.act:act_onehot})
 
-    def get_cell_state(self, state, state_in):
+    def get_cell_state(self, last_action, state, state_in):
+        act_onehot = [0]*self.action_count
+        act_onehot[last_action] = 1
         return self.session.run(self.rnn_state, feed_dict={self.state: [state], self.train_length: 1,
-                                                           self.state_in: state_in, self.batch_size: 1})
+                                                           self.state_in: state_in, self.batch_size: 1, self.act:act_onehot})

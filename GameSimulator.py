@@ -77,3 +77,6 @@ class GameSimulator:
         
     def get_total_reward(self):
         return self.rewards
+
+    def get_last_action(self):
+        return self.last_action

@@ -46,21 +46,21 @@ class Agent:
             a1, s1, a2, r, s2, d = self.memory.get_transition()
             inputs = s1
 
-            q = np.max(self.target_model.get_q(s2, state_in), axis=1)
+            q = np.max(self.target_model.get_q(a1, s2, state_in), axis=1)
             targets = r + self.gamma * (1 - d) * q
 
             self.model.learn(a1, inputs, targets, state_in, a2)
 
-    def act(self, state, train=True):
+    def act(self, last_action, state, train=True):
         if train:
             self.epsilon = self.explore(self.epsilon)
             if random() < self.epsilon:
                 a = self.random_action()
             else:
-                a, self.state_in = self.model.get_best_action(state, self.state_in)
+                a, self.state_in = self.model.get_best_action(last_action, state, self.state_in)
                 a = a[0]
         else:
-            a, self.state_in = self.model.get_best_action(state, self.state_in)
+            a, self.state_in = self.model.get_best_action(last_action, state, self.state_in)
             a = a[0]
         return a
 

@@ -137,7 +137,7 @@ if not SKIP_LEARNING:
             state = preprocess(game.get_state())
             while True:
                 learning_step += 1
-                action = agent.act(state)
+                action = agent.act(game.get_last_action(), state)
                 last_action, img_state, reward, done = game.make_action(action)
                 if not done:
                     state_new = preprocess(img_state)
@@ -166,7 +166,7 @@ if not SKIP_LEARNING:
             agent.reset_cell_state()
             while not game.is_terminared():
                 state = preprocess(game.get_state())
-                action = agent.act(state, train=False)
+                action = agent.act(game.get_last_action(), state, train=False)
                 game.make_action(action)
             test_scores.append(game.get_total_reward())
 
