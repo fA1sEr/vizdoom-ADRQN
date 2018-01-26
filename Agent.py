@@ -3,7 +3,6 @@ import numpy as np
 from Network import Network
 from ReplayMemory import ReplayMemory
 
-
 class Agent:
     def __init__(self, memory_cap, batch_size, resolution, action_count, session,
                  lr, gamma, epsilon_min, epsilon_decay_steps, epsilon_max, trace_length, hidden_size):
@@ -11,6 +10,7 @@ class Agent:
         self.model = Network(session=session, action_count=action_count,
                              resolution=resolution, lr=lr, batch_size=batch_size,
                              trace_length=trace_length, hidden_size=hidden_size, scope='main')
+
         self.target_model = Network(session=session, action_count=action_count,
                                     resolution=resolution, lr=lr, batch_size=batch_size,
                                     trace_length=trace_length, hidden_size=hidden_size, scope='target')
@@ -19,7 +19,6 @@ class Agent:
                                    resolution=resolution, trace_length=trace_length)
 
         self.batch_size = batch_size
-
         self.resolution = resolution
         self.action_count = action_count
         self.gamma = gamma
@@ -28,7 +27,6 @@ class Agent:
         self.epsilon_max = epsilon_max
         self.hidden_size = hidden_size
         self.trace_length = trace_length
-
         self.epsilon = epsilon_max
         self.training_steps = 0
 
@@ -38,23 +36,19 @@ class Agent:
 
         self.state_in = (np.zeros([1, self.hidden_size]), np.zeros([1, self.hidden_size]))
 
-    def add_experience_to_buffer(self, episode_buffer):
-        self.experience_buffer.add(episode_buffer)
-
-    def add_transition(self, s1, a, r, s2, d):
-        self.memory.add_transition(s1, a, r, s2, d)
+    def add_transition(self, a1, s1, a2, r, s2, d):
+        self.memory.add_transition(a1, s1, a2, r, s2, d)
 
     def learn_from_memory(self):
-
         if self.memory.size > self.min_buffer_size:
             state_in = (np.zeros([self.batch_size, self.hidden_size]), np.zeros([self.batch_size, self.hidden_size]))
-            s1, a, r, s2, d = self.memory.get_transition()
+            a1, s1, a2, r, s2, d = self.memory.get_transition()
             inputs = s1
 
             q = np.max(self.target_model.get_q(s2, state_in), axis=1)
             targets = r + self.gamma * (1 - d) * q
 
-            self.model.learn(inputs, targets, state_in, a)
+            self.model.learn(a1, inputs, targets, state_in, a2)
 
     def act(self, state, train=True):
         if train:

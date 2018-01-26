@@ -11,6 +11,7 @@ class GameSimulator:
         self.resolution = resolution
         self.actions = []
         self.rewards = 0.0
+        self.last_action = 0
         
     def initialize(self, visiable=False, rom=b'pong.bin'):
         # 初始化游戏，返回游戏的动作数目
@@ -21,7 +22,7 @@ class GameSimulator:
         self.game.loadROM(rom)
         # 获取屏幕大小
         self.screen_width, self.screen_height = self.game.getScreenDims()
-        # 初始化动作 one_hot
+        # 初始化动作 one_hot Actions:[0 3 4]
         self.actions = self.game.getMinimalActionSet()
         print('Actions:', self.actions)
         print("Atari initialized.")
@@ -57,7 +58,9 @@ class GameSimulator:
         new_state = self.get_state()
         done = self.is_terminared()
         self.rewards += reward
-        return new_state, reward, done
+        last_action = self.last_action
+        self.last_action = action
+        return last_action, new_state, reward, done
     
     def is_terminared(self):
         # 判断游戏是否终止
