@@ -47,7 +47,7 @@ class Network:
 
         # shape = [32,8,896]
         self.fc_reshape = tf.reshape(flat, [self.batch_size, self.train_length, hidden_size+self.action_fc_size])
-        self.state_in = self.cell.zero_state(self.batch_size, tf.float32)
+        self.state_in = self.cell.zero_state(self.batch_size + self.action_fc_size, tf.float32)
         self.rnn, self.rnn_state = tf.nn.dynamic_rnn(inputs=self.fc_reshape, cell=self.cell, dtype=tf.float32,
                                                      initial_state=self.state_in, scope=scope+'_rnn')
         self.rnn = tf.reshape(self.rnn, shape=[-1, hidden_size+self.action_fc_size])

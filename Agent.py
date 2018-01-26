@@ -29,19 +29,20 @@ class Agent:
         self.trace_length = trace_length
         self.epsilon = epsilon_max
         self.training_steps = 0
+        self.action_fc_size = 128
 
         self.epsilon_decrease = (epsilon_max-epsilon_min)/epsilon_decay_steps
 
         self.min_buffer_size = batch_size*trace_length
 
-        self.state_in = (np.zeros([1, self.hidden_size]), np.zeros([1, self.hidden_size]))
+        self.state_in = (np.zeros([1, self.hidden_size+self.action_fc_size]), np.zeros([1, self.hidden_size+self.action_fc_size]))
 
     def add_transition(self, a1, s1, a2, r, s2, d):
         self.memory.add_transition(a1, s1, a2, r, s2, d)
 
     def learn_from_memory(self):
         if self.memory.size > self.min_buffer_size:
-            state_in = (np.zeros([self.batch_size, self.hidden_size]), np.zeros([self.batch_size, self.hidden_size]))
+            state_in = (np.zeros([self.batch_size, self.hidden_size+self.action_fc_size]), np.zeros([self.batch_size, self.hidden_size+self.action_fc_size]))
             a1, s1, a2, r, s2, d = self.memory.get_transition()
             inputs = s1
 
@@ -70,4 +71,4 @@ class Agent:
         return randint(0, self.action_count - 1)
 
     def reset_cell_state(self):
-        self.state_in = (np.zeros([1, self.hidden_size]), np.zeros([1, self.hidden_size]))
+        self.state_in = (np.zeros([1, self.hidden_size+self.action_fc_size]), np.zeros([1, self.hidden_size+self.action_fc_size]))
