@@ -11,7 +11,7 @@ from Agent import Agent
 from GameSimulator import GameSimulator
 
 # to choose gpu
-os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
@@ -28,14 +28,14 @@ EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.05 # Min exploration rate
 EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 1000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 100000 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
 EPOCHS = 20000000 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
-GAMES_PER_EPOCH = 2 # How actions to be taken per epoch
-EPISODES_TO_TEST = 1 # How many test episodes to be run per epoch for logging performance
+GAMES_PER_EPOCH = 90 # How actions to be taken per epoch
+EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
 TAU = 0.99 # How much the target network should be updated towards the online network at each update
