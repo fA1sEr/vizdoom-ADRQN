@@ -22,13 +22,13 @@ BATCH_SIZE = 32 # Batch size for experience replay
 LEARNING_RATE = 0.001 # Learning rate of model
 GAMMA = 0.99 # Discount factor
 
-MEMORY_CAP = 100000 # Amount of samples to store in memory
+MEMORY_CAP = 200000 # Amount of samples to store in memory
 
 EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.05 # Min exploration rate
 EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 100000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 200000 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened

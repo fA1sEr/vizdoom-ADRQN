@@ -28,7 +28,6 @@ class Agent:
         self.hidden_size = hidden_size
         self.trace_length = trace_length
         self.epsilon = epsilon_max
-        self.training_steps = 0
         self.action_fc_size = 128
 
         self.epsilon_decrease = (epsilon_max-epsilon_min)/epsilon_decay_steps
@@ -44,12 +43,11 @@ class Agent:
         if self.memory.size > self.min_buffer_size:
             state_in = (np.zeros([self.batch_size, self.hidden_size+self.action_fc_size]), np.zeros([self.batch_size, self.hidden_size+self.action_fc_size]))
             a1, s1, a2, r, s2, d = self.memory.get_transition()
-            inputs = s1
 
-            q = np.max(self.target_model.get_q(a1, s2, state_in), axis=1)
+            q = np.max(self.target_model.get_q(a2, s2, state_in), axis=1)
             targets = r + self.gamma * (1 - d) * q
 
-            self.model.learn(a1, inputs, targets, state_in, a2)
+            self.model.learn(a1, s1, targets, state_in, a2)
 
     def act(self, last_action, state, train=True):
         if train:

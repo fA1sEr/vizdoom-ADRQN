@@ -76,8 +76,7 @@ class Network:
             act_onehot.append(tmp)
         feed_dict = {self.state: state, self.target_q: target_q, self.train_length: self.trace_length_size,
                      self.batch_size: self.train_batch_size, self.state_in: state_in, self.actions: action, self.act: act_onehot}
-        l, _ = self.session.run([self.loss, self.train_step], feed_dict=feed_dict)
-        return l
+        self.session.run(self.train_step, feed_dict=feed_dict)
 
     def get_q(self, last_action, state, state_in):
         act_onehot = []
