@@ -11,7 +11,7 @@ from Agent import Agent
 from GameSimulator import GameSimulator
 
 # to choose gpu
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
@@ -28,7 +28,7 @@ EPSILON_MAX = 1 # Max exploration rate
 EPSILON_MIN = 0.05 # Min exploration rate
 EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 200000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 0 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
@@ -40,7 +40,7 @@ EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
 TAU = 0.99 # How much the target network should be updated towards the online network at each update
 
-LOAD_MODEL = False # Load a saved model?
+LOAD_MODEL = True # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
@@ -82,7 +82,7 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
 SESSION = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 if LOAD_MODEL:
-    EPSILON_MAX = 0.05 # restart after 20+ epoch
+    EPSILON_MAX = 0.25 # restart after 20+ epoch
 
 agent = Agent(memory_cap = MEMORY_CAP, batch_size = BATCH_SIZE, resolution = RESOLUTION, action_count = ACTION_COUNT,
             session = SESSION, lr = LEARNING_RATE, gamma = GAMMA, epsilon_min = EPSILON_MIN, trace_length=TRACE_LENGTH,
