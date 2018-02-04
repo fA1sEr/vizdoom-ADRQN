@@ -57,7 +57,7 @@ class GameSimulator:
         self.last_action = action
         return last_action, new_state, reward, done
 
-    def get_last_action():
+    def get_last_action(self):
         return self.last_action
     
     def is_episode_finished(self):
