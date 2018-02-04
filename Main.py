@@ -159,7 +159,7 @@ if not SKIP_LEARNING:
         for test_step in range(EPISODES_TO_TEST):
             game.reset()
             agent.reset_cell_state()
-            while not game.is_terminared():
+            while not game.is_episode_finished():
                 state = game.get_state()
                 action = agent.act(game.get_last_action(), state, train=False)
                 game.make_action(action)
