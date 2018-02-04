@@ -38,7 +38,7 @@ class GameSimulator:
         # 获取当前游戏的画面，游戏结束则获得空
         if self.game.is_episode_finished():
             return None
-        img = self.game.get_state().screen_buffers
+        img = self.game.get_state().screen_buffer
         #img = img.reshape([self.screen_height, self.screen_width])
         # 如果进行预处理
         if preprocess: img = self.__preprocess(img)
@@ -49,13 +49,16 @@ class GameSimulator:
         return self.game.get_available_buttons_size()
     
     def make_action(self, action):
-        reward = self.game.make_action(actions[action], FRAME_REPEAT)
+        reward = self.game.make_action(self.actions[action], self.frame_repeat)
         new_state = self.get_state()
         done = self.is_episode_finished()
         self.rewards += reward
         last_action = self.last_action
         self.last_action = action
         return last_action, new_state, reward, done
+
+    def get_last_action():
+        return self.last_action
     
     def is_episode_finished(self):
         # 判断游戏是否终止
