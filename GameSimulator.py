@@ -1,3 +1,4 @@
+import itertools as it
 from vizdoom import *
 import skimage.color
 import skimage.transform
