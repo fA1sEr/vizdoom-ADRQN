@@ -49,11 +49,6 @@ reward_savefile = "train_data/Rewards.txt"
 
 ##########################################
 
-def preprocess(img):
-    img = skimage.transform.resize(img,RESOLUTION, mode='constant')
-    img = img.astype(np.float32)
-    return img
-
 def updateTargetGraph(tfVars,tau):
     total_vars = len(tfVars)
     op_holder = []
@@ -109,12 +104,12 @@ if not SKIP_LEARNING:
     updateTarget(targetOps, SESSION)
 
     agent.reset_cell_state()
-    state = preprocess(game.get_state())
+    state = game.get_state()
     for _ in range(RANDOM_WANDER_STEPS):
         action = agent.random_action()
         last_action, img_state, reward, done = game.make_action(action)
         if not done:
-            state_new = preprocess(img_state)
+            state_new = img_state
         else:
             state_new = None
 
@@ -124,7 +119,7 @@ if not SKIP_LEARNING:
         if done:
             game.reset()
             agent.reset_cell_state()
-            state = preprocess(game.get_state())
+            state = game.get_state()
 
     for epoch in range(EPOCHS):
         print("\n\nEpoch %d\n-------" % (epoch + 1))
@@ -134,13 +129,13 @@ if not SKIP_LEARNING:
         for games_cnt in range(GAMES_PER_EPOCH):
             game.reset()
             agent.reset_cell_state()
-            state = preprocess(game.get_state())
+            state = game.get_state()
             while True:
                 learning_step += 1
                 action = agent.act(game.get_last_action(), state)
                 last_action, img_state, reward, done = game.make_action(action)
                 if not done:
-                    state_new = preprocess(img_state)
+                    state_new = img_state
                 else:
                     state_new = None
                 agent.add_transition(last_action, state, action, reward, state_new, done)
@@ -165,7 +160,7 @@ if not SKIP_LEARNING:
             game.reset()
             agent.reset_cell_state()
             while not game.is_terminared():
-                state = preprocess(game.get_state())
+                state = game.get_state()
                 action = agent.act(game.get_last_action(), state, train=False)
                 game.make_action(action)
             test_scores.append(game.get_total_reward())

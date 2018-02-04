@@ -38,7 +38,7 @@ class GameSimulator:
         # 获取当前游戏的画面，游戏结束则获得空
         if self.game.is_episode_finished():
             return None
-        img = self.game.get_state()
+        img = self.game.get_state().screen_buffers
         #img = img.reshape([self.screen_height, self.screen_width])
         # 如果进行预处理
         if preprocess: img = self.__preprocess(img)
