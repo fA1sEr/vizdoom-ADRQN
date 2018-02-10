@@ -26,6 +26,8 @@ class GameSimulator:
         self.game.init()
         n = self.game.get_available_buttons_size()
         self.actions = [list(a) for a in it.product([0, 1], repeat=n)]
+        print(self.actions)
+        print(type(self.actions))
         print("Doom initialized.")
     
     # 对游戏图像进行处理，后期可能放到GameSimulator中

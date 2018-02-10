@@ -11,7 +11,7 @@ from Agent import Agent
 from GameSimulator import GameSimulator
 
 # to choose gpu
-#os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
@@ -25,16 +25,16 @@ GAMMA = 0.99 # Discount factor
 MEMORY_CAP = 200000 # Amount of samples to store in memory
 
 EPSILON_MAX = 1 # Max exploration rate
-EPSILON_MIN = 0.05 # Min exploration rate
+EPSILON_MIN = 0.1 # Min exploration rate
 EPSILON_DECAY_STEPS = 2e5 # How many steps to decay from max exploration to min exploration
 
-RANDOM_WANDER_STEPS = 200000 # How many steps to be sampled randomly before training starts
+RANDOM_WANDER_STEPS = 50000 # How many steps to be sampled randomly before training starts
 
 TRACE_LENGTH = 8 # How many traces are used for network updates
 HIDDEN_SIZE = 768 # Size of the third convolutional layer when flattened
 
 EPOCHS = 20000000 # Epochs for training (1 epoch = 200 training Games and 10 test episodes)
-GAMES_PER_EPOCH = 90 # How actions to be taken per epoch
+GAMES_PER_EPOCH = 1000 # How actions to be taken per epoch
 EPISODES_TO_TEST = 10 # How many test episodes to be run per epoch for logging performance
 EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
@@ -122,7 +122,7 @@ if not SKIP_LEARNING:
             state = game.get_state()
 
     for epoch in range(EPOCHS):
-        print("\n\nEpoch %d\n-------" % (epoch + 1))
+        print("\n\nEpoch %d\n-------" % (epoch))
         print("Training...")
 
         learning_step = 0
