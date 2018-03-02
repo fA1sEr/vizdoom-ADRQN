@@ -4,7 +4,7 @@ import skimage.color
 import skimage.transform
 import numpy as np
 
-scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/simpler_basic.cfg" # Name and path of scenario
+scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/take_cover.cfg" # Name and path of scenario
 
 class GameSimulator:
     def __init__(self, frame_repeat=4, resolution=(80, 45, 3)):
@@ -26,6 +26,7 @@ class GameSimulator:
         self.game.init()
         n = self.game.get_available_buttons_size()
         self.actions = [list(a) for a in it.product([0, 1], repeat=n)]
+        print("self.actions---------------------------------")
         print(self.actions)
         print(type(self.actions))
         print("Doom initialized.")

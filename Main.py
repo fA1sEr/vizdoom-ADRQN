@@ -71,6 +71,8 @@ game = GameSimulator()
 game.initialize()
 
 ACTION_COUNT = game.get_action_size()
+print("game.get_action_size()---------------------------")
+print(ACTION_COUNT)
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
 
@@ -103,6 +105,7 @@ if not SKIP_LEARNING:
     print("\nFilling out replay memory")
     updateTarget(targetOps, SESSION)
 
+    game.reset()
     agent.reset_cell_state()
     state = game.get_state()
     for _ in range(RANDOM_WANDER_STEPS):
