@@ -49,7 +49,7 @@ class GameSimulator:
     
     def get_action_size(self):
         # 获取动作数目
-        return self.game.get_available_buttons_size()
+        return len(self.actions)
     
     def make_action(self, action):
         reward = self.game.make_action(self.actions[action], self.frame_repeat)
