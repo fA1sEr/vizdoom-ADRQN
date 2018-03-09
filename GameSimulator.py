@@ -4,7 +4,7 @@ import skimage.color
 import skimage.transform
 import numpy as np
 
-scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/take_cover.cfg" # Name and path of scenario
+scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/simpler_basic.cfg" # Name and path of scenario
 
 class GameSimulator:
     def __init__(self, frame_repeat=4, resolution=(80, 45, 3)):
@@ -52,7 +52,9 @@ class GameSimulator:
         return len(self.actions)
     
     def make_action(self, action):
-        reward = self.game.make_action(self.actions[action], self.frame_repeat)
+        now_action = self.actions[action]
+        print('make action ', now_action)
+        reward = self.game.make_action(now_action, self.frame_repeat)
         new_state = self.get_state()
         done = self.is_episode_finished()
         self.rewards += reward
