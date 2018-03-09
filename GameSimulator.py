@@ -53,7 +53,7 @@ class GameSimulator:
     
     def make_action(self, action):
         now_action = self.actions[action]
-        print('make action ', now_action)
+        #print('make action ', now_action)
         reward = self.game.make_action(now_action, self.frame_repeat)
         new_state = self.get_state()
         done = self.is_episode_finished()

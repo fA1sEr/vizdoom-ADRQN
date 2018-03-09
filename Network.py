@@ -14,7 +14,7 @@ class Network:
         # shape = [8*32,80,45,3]
         self.state = tf.placeholder(tf.float32, shape=[None, resolution[0], resolution[1], resolution[2]])
 
-        # shape = [8*32,3]
+        # shape = [8*32,8]
         self.act = tf.placeholder(tf.float32, shape=[None, action_count])
 
         # shape = [8*32,128]
