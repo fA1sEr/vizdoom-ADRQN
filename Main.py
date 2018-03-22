@@ -110,7 +110,7 @@ if not SKIP_LEARNING:
     agent.reset_cell_state()
     state = game.get_state()
     for _ in range(RANDOM_WANDER_STEPS):
-        if LOAD_MODEL:
+        if not LOAD_MODEL:
             action = agent.random_action()
         else:
             action = agent.act(game.get_last_action(), state)
@@ -128,7 +128,7 @@ if not SKIP_LEARNING:
             agent.reset_cell_state()
             state = game.get_state()
 
-    max_avgR = 0.0
+    max_avgR = -1000.0
 
     for epoch in range(EPOCHS):
         print("\n\nEpoch %d\n-------" % (epoch))
