@@ -40,11 +40,12 @@ EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
 TAU = 0.99 # How much the target network should be updated towards the online network at each update
 
-LOAD_MODEL = False # Load a saved model?
+LOAD_MODEL = True # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
 model_savefile = "train_data/model.ckpt" # Name and path of the model
+max_model_savefile = "train_data/max_model/max_model.ckpt"
 reward_savefile = "train_data/Rewards.txt"
 
 ##########################################
@@ -109,7 +110,10 @@ if not SKIP_LEARNING:
     agent.reset_cell_state()
     state = game.get_state()
     for _ in range(RANDOM_WANDER_STEPS):
-        action = agent.random_action()
+        if LOAD_MODEL:
+            action = agent.random_action()
+        else:
+            action = agent.act(game.get_last_action(), state)
         last_action, img_state, reward, done = game.make_action(action)
         if not done:
             state_new = img_state
@@ -123,6 +127,8 @@ if not SKIP_LEARNING:
             game.reset()
             agent.reset_cell_state()
             state = game.get_state()
+
+    max_avgR = 0.0
 
     for epoch in range(EPOCHS):
         print("\n\nEpoch %d\n-------" % (epoch))
@@ -176,8 +182,9 @@ if not SKIP_LEARNING:
             saveScore(test_scores.mean())
             saver.save(SESSION, model_savefile)
             print("Saving the network weigths to:", model_savefile)
-            if epoch % (EPOCHS/5) == 0 and epoch is not 0:
-                saver.save(SESSION, model_savefile, global_step=epoch)
+            if test_scores.mean() > max_avgR:
+                max_avgR = test_scores.mean()
+                saver.save(SESSION, max_model_savefile)
 
         print("Total ellapsed time: %.2f minutes" % ((time() - time_start) / 60.0))
 '''
