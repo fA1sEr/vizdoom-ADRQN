@@ -25,7 +25,12 @@ class GameSimulator:
         self.game.set_screen_resolution(ScreenResolution.RES_400X225)
         self.game.init()
         n = self.game.get_available_buttons_size()
-        self.actions = [list(a) for a in it.product([0, 1], repeat=n)]
+        #self.actions = [list(a) for a in it.product([0, 1], repeat=n)]
+        self.actions = []
+        for i in range(n):
+            ac = [0]*n
+            ac[i] = 1
+            self.actions.append(ac)
         print("self.actions---------------------------------")
         print(self.actions)
         print(type(self.actions))

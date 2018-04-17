@@ -40,7 +40,7 @@ EPISODE_TO_WATCH = 10 # How many episodes to watch after training is complete
 
 TAU = 0.99 # How much the target network should be updated towards the online network at each update
 
-LOAD_MODEL = True # Load a saved model?
+LOAD_MODEL = False # Load a saved model?
 SAVE_MODEL = True # Save a model while training?
 SKIP_LEARNING = False # Skip training completely and just watch?
 
@@ -63,7 +63,7 @@ def updateTarget(op_holder,sess):
 
 def saveScore(score):
     my_file = open(reward_savefile, 'a')  # Name and path of the reward text file
-    my_file.write("%s\n" % score)
+    my_file.write("%.1f (±%.1f)  min:%.1f  max:%.1f\n" % (score.mean(), score.std(), score.min(), score.max()))
     my_file.close()
 
 ###########################################
@@ -80,7 +80,7 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
 SESSION = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 if LOAD_MODEL:
-    EPSILON_MAX = 0.25 # restart after 20+ epoch
+    EPSILON_MAX = 0.10 # restart after 20+ epoch
 
 agent = Agent(memory_cap = MEMORY_CAP, batch_size = BATCH_SIZE, resolution = RESOLUTION, action_count = ACTION_COUNT,
             session = SESSION, lr = LEARNING_RATE, gamma = GAMMA, epsilon_min = EPSILON_MIN, trace_length=TRACE_LENGTH,
@@ -158,7 +158,7 @@ if not SKIP_LEARNING:
                 if done:
                     print("Epoch %d Train Game %d get %.1f" % (epoch, games_cnt, game.get_total_reward()))
                     break
-            if SAVE_MODEL and games_cnt % 10 == 0:
+            if SAVE_MODEL and games_cnt % 50 == 0:
                 saver.save(SESSION, model_savefile)
                 print("Saving the network weigths to:", model_savefile)
 
@@ -179,9 +179,7 @@ if not SKIP_LEARNING:
               "min: %.1f" % test_scores.min(), "max: %.1f" % test_scores.max())
 
         if SAVE_MODEL:
-            saveScore(test_scores.mean())
-            saver.save(SESSION, model_savefile)
-            print("Saving the network weigths to:", model_savefile)
+            saveScore(test_scores)
             if test_scores.mean() > max_avgR:
                 max_avgR = test_scores.mean()
                 saver.save(SESSION, max_model_savefile)
