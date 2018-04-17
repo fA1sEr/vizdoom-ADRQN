@@ -60,6 +60,9 @@ class GameSimulator:
         now_action = self.actions[action]
         #print('make action ', now_action)
         reward = self.game.make_action(now_action, self.frame_repeat)
+        # to fix reward
+        if action==2 and reward<0:
+            reward *= 10
         new_state = self.get_state()
         done = self.is_episode_finished()
         self.rewards += reward
