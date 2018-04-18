@@ -7,7 +7,7 @@ import numpy as np
 scenario_path = "/home/ghmiao/VizDoomDependFiles/ViZDoom/scenarios/simpler_basic.cfg" # Name and path of scenario
 
 class GameSimulator:
-    def __init__(self, frame_repeat=4, resolution=(80, 45, 3)):
+    def __init__(self, frame_repeat=4, resolution=(45, 80, 3)):
         self.game = None
         self.frame_repeat = frame_repeat
         self.resolution = resolution
@@ -61,8 +61,8 @@ class GameSimulator:
         #print('make action ', now_action)
         reward = self.game.make_action(now_action, self.frame_repeat)
         # to fix reward
-        if action==2 and reward<0:
-            reward *= 10
+#        if action==2 and reward<0:
+#            reward *= 10
         new_state = self.get_state()
         done = self.is_episode_finished()
         self.rewards += reward

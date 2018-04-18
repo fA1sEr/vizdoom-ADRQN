@@ -17,7 +17,7 @@ FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
 COPY_FREQUENCY = 1000
 
-RESOLUTION = (80, 45, 3) # Resolution
+RESOLUTION = (45, 80, 3) # Resolution
 BATCH_SIZE = 32 # Batch size for experience replay
 LEARNING_RATE = 0.001 # Learning rate of model
 GAMMA = 0.99 # Discount factor
