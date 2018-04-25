@@ -11,7 +11,7 @@ from Agent import Agent
 from GameSimulator import GameSimulator
 
 # to choose gpu
-os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 FRAME_REPEAT = 4 # How many frames 1 action should be repeated
 UPDATE_FREQUENCY = 4 # How many actions should be taken between each network update
@@ -75,9 +75,12 @@ ACTION_COUNT = game.get_action_size()
 print("game.get_action_size()---------------------------")
 print(ACTION_COUNT)
 
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+SESSION = tf.Session(config=config)
 
-SESSION = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+#gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.33)
+#SESSION = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 if LOAD_MODEL:
     EPSILON_MAX = 0.10 # restart after 20+ epoch

@@ -40,6 +40,7 @@ class GameSimulator:
     def __preprocess(self, img):
         img = skimage.transform.resize(img, self.resolution, mode='constant')
         img = img.astype(np.float32)
+        img = img / 255.0
         return img
     
     def get_state(self, preprocess=True):
@@ -60,6 +61,7 @@ class GameSimulator:
         now_action = self.actions[action]
         #print('make action ', now_action)
         reward = self.game.make_action(now_action, self.frame_repeat)
+        reward = reward / 10
         # to fix reward
 #        if action==2 and reward<0:
 #            reward *= 10
